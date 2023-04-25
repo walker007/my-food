@@ -67,16 +67,52 @@ export default function Page() {
           color="green"
         />
       </Flex>
-      <Flex as="section" mt={10} gap={4} wrap="wrap">
-        <CardLoja
-          path="/"
-          nome="EmiCi Donaldi"
-          nota={4.5}
-          categoria="Lanches"
-          distancia="1.2km"
-          tempo="30-40 min"
-          taxaEntrega={0}
-        />
+      <Flex
+        as="section"
+        maxW="90vw"
+        marginLeft="5vw"
+        direction={'column'}
+        mt={10}
+      >
+        <Heading fontSize="1.25rem">Lojas</Heading>
+        <Flex gap={8} mt={2} wrap="wrap" align="center">
+          <CardLoja
+            path="/"
+            nome="EmiCi Donaldi"
+            nota={4.5}
+            categoria="Lanches"
+            distancia="1.2km"
+            tempo="30-40 min"
+            taxaEntrega={2.25}
+          />
+          <CardLoja
+            path="/"
+            nome="EmiCi Donaldi"
+            nota={4.5}
+            categoria="Lanches"
+            distancia="1.2km"
+            tempo="30-40 min"
+            taxaEntrega={0}
+          />
+          <CardLoja
+            path="/"
+            nome="EmiCi Donaldi"
+            nota={4.5}
+            categoria="Lanches"
+            distancia="1.2km"
+            tempo="30-40 min"
+            taxaEntrega={38.9}
+          />
+          <CardLoja
+            path="/"
+            nome="EmiCi Donaldi"
+            nota={4.5}
+            categoria="Lanches"
+            distancia="1.2km"
+            tempo="30-40 min"
+            taxaEntrega={0}
+          />
+        </Flex>
       </Flex>
     </Flex>
   )
