@@ -21,14 +21,17 @@ export const Header: FC<HeaderProps> = ({ isOpen, onToggle }) => {
       align="center"
       position="fixed"
       transition="all 0.2s"
-      maxH="130px"
+      maxH={{ base: 'auto', md: '130px' }}
+      bg="gray.100"
+      zIndex="9999"
     >
-      <Link href="/">
-        <Heading>My Food</Heading>
-      </Link>
       <MenuToggle isOpen={isOpen} onToggle={onToggle} />
+      <Link href="/">
+        <Heading fontSize={['12px', '2rem']}>MyFood</Heading>
+      </Link>
+
       <Menu isOpen={isOpen} />
-      <Flex gap="4">
+      <Flex gap="4" display={{ base: isOpen ? 'flex' : 'none', md: 'flex' }}>
         <Button as={Link} href="/" variant="link" colorScheme="red">
           crie sua conta
         </Button>
