@@ -35,7 +35,7 @@ export const Header: FC<HeaderProps> = ({ isOpen, onToggle }) => {
         <Button as={Link} href="/" variant="link" colorScheme="red">
           crie sua conta
         </Button>
-        <Button as={Link} href="/" colorScheme="red">
+        <Button as={Link} href="/login" colorScheme="red">
           Entrar
         </Button>
       </Flex>
