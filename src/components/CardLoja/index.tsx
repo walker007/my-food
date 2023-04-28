@@ -1,7 +1,8 @@
 import { Link } from '@chakra-ui/next-js'
-import { Box, Flex, Heading, Text, Image, Icon } from '@chakra-ui/react'
+import { Flex, Heading, Text, Image } from '@chakra-ui/react'
 import { FC } from 'react'
-import { FaStar } from 'react-icons/fa'
+
+import { StarRating } from '../StarRating'
 
 interface CardLojaProps {
   path: string
@@ -53,9 +54,7 @@ export const CardLoja: FC<CardLojaProps> = ({
         <Flex direction="column" gap={2}>
           <Heading fontSize="1rem">{nome}</Heading>
           <Flex gap={2} fontSize="0.9rem" color="blackAlpha.500">
-            <Box color="yellow.500">
-              <Icon as={FaStar} /> {nota}
-            </Box>
+            <StarRating nota={nota} />
             <Text as="span">•</Text>
             <Text>{categoria}</Text>
             <Text as="span">•</Text>
