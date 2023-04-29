@@ -1,5 +1,6 @@
 'use client'
 import { CardProduto } from '@/components/CardProduto'
+import { CardProdutoHorizontal } from '@/components/CardProdutoHorizontal'
 import { StarRating } from '@/components/StarRating'
 import {
   Button,
@@ -86,15 +87,65 @@ export default function Loja({ params: { id } }: LojaProps) {
           </Flex>
         </Flex>
       </Flex>
-      <Flex as="section" direction="column" grow={1} maxW="1200px">
+      <Flex as="section" direction="column" grow={1} maxW="1200px" mt={2}>
         <Heading fontSize="1rem">Destaques</Heading>
         <Divider />
 
-        <Flex wrap="wrap" gap={6}>
-          <CardProduto descricao="" image="" preco={0} nome="" />
-          <CardProduto descricao="" image="" preco={0} nome="" />
-          <CardProduto descricao="" image="" preco={0} nome="" />
-          <CardProduto descricao="" image="" preco={0} nome="" />
+        <Flex wrap="wrap" gap={6} mt={2}>
+          <CardProduto
+            descricao="Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusamus ipsam mollitia voluptatem sunt dolore ducimus minima fuga. Delectus, laborum ea repudiandae incidunt temporibus explicabo libero consequuntur laudantium eligendi aliquid!"
+            image="https://placehold.co/398x157"
+            preco={20.85}
+            nome="Grande Méqui"
+          />
+          <CardProduto
+            descricao="Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusamus ipsam mollitia voluptatem sunt dolore ducimus minima fuga. Delectus, laborum ea repudiandae incidunt temporibus explicabo libero consequuntur laudantium eligendi aliquid!"
+            image="https://placehold.co/398x157"
+            preco={15.28}
+            nome="Quadra"
+          />
+          <CardProduto
+            descricao="Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusamus ipsam mollitia voluptatem sunt dolore ducimus minima fuga. Delectus, laborum ea repudiandae incidunt temporibus explicabo libero consequuntur laudantium eligendi aliquid!"
+            image="https://placehold.co/398x157"
+            preco={28.75}
+            nome="Emici Lanchinho felizinho"
+          />
+          <CardProduto
+            descricao="Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusamus ipsam mollitia voluptatem sunt dolore ducimus minima fuga. Delectus, laborum ea repudiandae incidunt temporibus explicabo libero consequuntur laudantium eligendi aliquid!"
+            image="https://placehold.co/398x157"
+            preco={15.78}
+            nome="Emici galinha"
+          />
+        </Flex>
+      </Flex>
+      <Flex as="section" direction="column" grow={1} mt={2} maxW="1200px">
+        <Heading fontSize="1rem">Produtos</Heading>
+        <Divider />
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          gap={4}
+          wrap="wrap"
+          mt={2}
+          p={1}
+        >
+          <CardProdutoHorizontal
+            descricao="Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusamus ipsam mollitia voluptatem sunt dolore ducimus minima fuga. Delectus, laborum ea repudiandae incidunt temporibus explicabo libero consequuntur laudantium eligendi aliquid!"
+            image="https://placehold.co/398x157"
+            preco={15.78}
+            nome="Emici galinha"
+          />
+          <CardProdutoHorizontal
+            descricao="Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusamus ipsam mollitia voluptatem sunt dolore ducimus minima fuga. Delectus, laborum ea repudiandae incidunt temporibus explicabo libero consequuntur laudantium eligendi aliquid!"
+            image="https://placehold.co/398x157"
+            preco={15.78}
+            nome="Emici galinha"
+          />
+          <CardProdutoHorizontal
+            descricao="Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusamus ipsam mollitia voluptatem sunt dolore ducimus minima fuga. Delectus, laborum ea repudiandae incidunt temporibus explicabo libero consequuntur laudantium eligendi aliquid!"
+            image="https://placehold.co/398x157"
+            preco={15.78}
+            nome="Emici galinha"
+          />
         </Flex>
       </Flex>
     </Flex>
