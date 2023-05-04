@@ -1,24 +1,18 @@
+'use client'
 import { Link } from '@chakra-ui/next-js'
 import {
-  Button,
   Flex,
   HStack,
   Heading,
   IconButton,
-  Text,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
 } from '@chakra-ui/react'
 import { FC } from 'react'
-import {
-  FaCog,
-  FaDoorOpen,
-  FaShoppingBasket,
-  FaUserAlt,
-  FaUserCog,
-} from 'react-icons/fa'
+import { FaCog, FaDoorOpen, FaUserAlt, FaUserCog } from 'react-icons/fa'
+import { CheckoutButton } from '../CheckoutButton'
 
 export const HeaderUser: FC = () => {
   return (
@@ -51,17 +45,7 @@ export const HeaderUser: FC = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-        <Button
-          as={Link}
-          href="/"
-          aria-label="Carrinho de compras do usuário"
-          leftIcon={<FaShoppingBasket />}
-        >
-          <Flex direction="column" fontSize="10px" fontWeight={500}>
-            <Text>R$ 0,00</Text>
-            <Text>0 Itens</Text>
-          </Flex>
-        </Button>
+        <CheckoutButton />
       </HStack>
     </Flex>
   )

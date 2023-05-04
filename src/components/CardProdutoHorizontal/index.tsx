@@ -12,19 +12,18 @@ import {
 import { formataMoeda } from '@/helpers/formataMoeda'
 
 export const CardProdutoHorizontal: FC<CardProdutoProps> = ({
-  nome,
-  image,
-  descricao,
-  preco,
+  produto: { nome, imagem, descricao, preco, id },
+  handleOpenModal,
 }) => {
   return (
     <Card
       overflow="hidden"
       direction="row"
+      onClick={() => handleOpenModal(id)}
       _hover={{ transform: 'scale(1.01)' }}
       transition="all 0.2s"
     >
-      <Image src={image} alt={'Produto: ' + nome} objectFit="cover" />
+      <Image src={imagem} alt={'Produto: ' + nome} objectFit="cover" />
       <Stack>
         <CardBody>
           <Heading size="md">{nome}</Heading>
