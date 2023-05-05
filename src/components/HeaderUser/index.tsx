@@ -20,7 +20,7 @@ export const HeaderUser: FC = () => {
       position="fixed"
       justify="space-between"
       p={4}
-      zIndex={9999}
+      zIndex={999}
       w="100%"
       bg="gray.50"
       align="center"
