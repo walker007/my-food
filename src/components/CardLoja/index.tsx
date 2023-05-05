@@ -3,26 +3,16 @@ import { Flex, Heading, Text, Image } from '@chakra-ui/react'
 import { FC } from 'react'
 
 import { StarRating } from '../StarRating'
+import { Loja } from '@/services/lojaService'
 
 interface CardLojaProps {
+  loja: Loja
   path: string
-  nome: string
-  nota: number
-  tempo: string
-  taxaEntrega: number
-  categoria: string
-  distancia: string
-  logo?: string
 }
 
 export const CardLoja: FC<CardLojaProps> = ({
   path,
-  nome,
-  nota,
-  tempo,
-  taxaEntrega,
-  categoria,
-  distancia,
+  loja: { nome, nota, tempo, taxaEntrega, categoria, distancia, imageLogo },
 }) => {
   const moneyFormatter = new Intl.NumberFormat('pt-br', {
     style: 'currency',
@@ -47,7 +37,7 @@ export const CardLoja: FC<CardLojaProps> = ({
     >
       <Flex gap={4} align="center" justify="space-between">
         <Image
-          src="https://placehold.co/100"
+          src={imageLogo}
           alt={`Logotipo da Loja ${nome}`}
           borderRadius="full"
         />

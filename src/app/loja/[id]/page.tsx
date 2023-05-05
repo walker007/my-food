@@ -4,6 +4,7 @@ import { CardProdutoHorizontal } from '@/components/CardProdutoHorizontal'
 import { ModalProduto } from '@/components/ModalProduto'
 import { StarRating } from '@/components/StarRating'
 import { formataMoeda } from '@/helpers/formataMoeda'
+import { obterLoja } from '@/services/lojaService'
 import { getProdutos } from '@/services/produtoService'
 import {
   Button,
@@ -17,6 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { AiFillDollarCircle } from 'react-icons/ai'
+import { redirect } from 'next/navigation'
 
 type LojaProps = {
   params: {
@@ -27,14 +29,11 @@ type LojaProps = {
 export default function Loja({ params: { id } }: LojaProps) {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [addId, setAddId] = useState('')
-  const dadosLoja = {
-    nome: 'EmiCi Donaldi',
-    nota: 4.5,
-    categoria: 'Lanches',
-    distancia: '1.2km',
-    tempo: '30-40 min',
-    taxaEntrega: 2.25,
-    pedidoMinimo: 75.5,
+  const dadosLoja = obterLoja(id)
+
+  if (!dadosLoja) {
+    redirect('/')
+    return
   }
 
   const handleOpenModal = (id: string) => {
@@ -57,13 +56,13 @@ export default function Loja({ params: { id } }: LojaProps) {
     >
       <Flex as="header" direction="column">
         <Image
-          src="https://placehold.co/1200x250"
+          src={dadosLoja.imageCover}
           alt={'Imagem de capa da empresa: ' + dadosLoja.nome}
           borderRadius="10px"
         />
         <Flex align="center" gap={4} mt={2}>
           <Image
-            src="https://placehold.co/100"
+            src={dadosLoja.imageLogo}
             alt={'Logo da empresa: ' + dadosLoja.nome}
             borderRadius="full"
           />
