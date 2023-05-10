@@ -5,6 +5,7 @@ import { useCart } from '@/contexts/CartContext'
 import { formataMoeda } from '@/helpers/formataMoeda'
 import { obterUsuario } from '@/services/usuarioService'
 import {
+  Box,
   Button,
   Divider,
   Flex,
@@ -18,11 +19,15 @@ import {
 } from '@chakra-ui/react'
 import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 export default function PagamentoPage() {
   const { produtos, valor } = useCart()
   const usuario = obterUsuario('1')
   const [freteTaxa, setFreteTaxa] = useState(0)
+  const { register, watch, handleSubmit } = useForm()
+
+  const finalizaCompra = (data: any) => {}
 
   useEffect(() => {
     setFreteTaxa(
@@ -131,21 +136,83 @@ export default function PagamentoPage() {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Flex as="form" direction="column" mx={16} gap={2}>
-                <Input id="cardNumber" label="Número do cartão" type="number" />
-                <Input
-                  id="cardNome"
-                  label="Nome Impresso no cartão"
-                  type="text"
-                />
-                <Flex gap={3}>
-                  <Input id="validade" label="Validade" type="text" />
-                  <Input id="cvv" label="CVV" type="number" />
+              <Flex
+                align="center"
+                direction="column"
+                as="form"
+                onSubmit={handleSubmit(finalizaCompra)}
+                grow={1}
+              >
+                <Flex justify="space-around" align="center">
+                  <Flex
+                    direction="column"
+                    gap={2}
+                    borderRadius="7px"
+                    px={4}
+                    py={8}
+                    boxShadow="8px 5px 15px rgba(0,0,0,0.3)"
+                  >
+                    <Input
+                      id="cardNumber"
+                      label="Número do cartão"
+                      type="number"
+                      {...register('cartaoNumero')}
+                    />
+                    <Input
+                      id="cardNome"
+                      label="Nome Impresso no cartão"
+                      type="text"
+                      {...register('cartaoNome')}
+                    />
+                    <Flex gap={3}>
+                      <Input
+                        id="validade"
+                        label="Validade"
+                        type="text"
+                        {...register('cartaoValidade')}
+                      />
+                      <Input
+                        id="cvv"
+                        label="CVV"
+                        type="number"
+                        {...register('cvv')}
+                      />
+                    </Flex>
+                    <Input
+                      id="cpf"
+                      label="CPF"
+                      type="text"
+                      {...register('cpf')}
+                    />
+                  </Flex>
+
+                  <Flex ml={8}>
+                    <Flex
+                      direction="column"
+                      bg="red.200"
+                      w="300px"
+                      h="150px"
+                      p={4}
+                      borderRadius={8}
+                      color="white"
+                    >
+                      <Heading>Seu Cartão</Heading>
+                      <Flex direction="column" justify="flex-end" grow={1}>
+                        <Text>{watch('cartaoNumero')}</Text>
+                        <Flex gap={3}>
+                          <Text>{watch('cartaoNome')}</Text>
+                          <Text>{watch('cartaoValidade')}</Text>
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  </Flex>
                 </Flex>
-                <Input id="cpf" label="CPF" type="text" />
+                <Button type="submit" colorScheme="green" mt="4" w="200px">
+                  Pagar
+                </Button>
               </Flex>
             </TabPanel>
-            <TabPanel>Informação do Pix</TabPanel>
+            <TabPanel>Em breve...</TabPanel>
           </TabPanels>
         </Tabs>
       </Flex>
