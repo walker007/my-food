@@ -2,6 +2,7 @@ import { Link } from '@chakra-ui/next-js'
 import { Button, Flex, Image, Text } from '@chakra-ui/react'
 import { FC, useEffect, useState } from 'react'
 import { AiOutlineRight } from 'react-icons/ai'
+
 interface CardDestaqueProps {
   titulo: string
   path: string

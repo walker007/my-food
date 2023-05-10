@@ -3,6 +3,9 @@ import { Link } from '@chakra-ui/next-js'
 import { FC } from 'react'
 import { MenuToggle } from '../Menu/MenuToggle'
 import { Menu } from '../Menu'
+import { useAuth } from '@/contexts/AuthContext'
+import { CheckoutButton } from '../CheckoutButton'
+import { UserMenu } from '../UserMenu'
 
 interface HeaderProps {
   isOpen: boolean
@@ -10,6 +13,7 @@ interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({ isOpen, onToggle }) => {
+  const { isLogged } = useAuth()
   return (
     <Flex
       gap="5px"
@@ -31,14 +35,21 @@ export const Header: FC<HeaderProps> = ({ isOpen, onToggle }) => {
       </Link>
 
       <Menu isOpen={isOpen} />
-      <Flex gap="4" display={{ base: isOpen ? 'flex' : 'none', md: 'flex' }}>
-        <Button as={Link} href="/cadastro" variant="link" colorScheme="red">
-          crie sua conta
-        </Button>
-        <Button as={Link} href="/login" colorScheme="red">
-          Entrar
-        </Button>
-      </Flex>
+      {isLogged ? (
+        <Flex gap={4} display={{ base: isOpen ? 'flex' : 'none', md: 'flex' }}>
+          <UserMenu />
+          <CheckoutButton />
+        </Flex>
+      ) : (
+        <Flex gap="4" display={{ base: isOpen ? 'flex' : 'none', md: 'flex' }}>
+          <Button as={Link} href="/cadastro" variant="link" colorScheme="red">
+            crie sua conta
+          </Button>
+          <Button as={Link} href="/login" colorScheme="red">
+            Entrar
+          </Button>
+        </Flex>
+      )}
     </Flex>
   )
 }

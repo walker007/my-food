@@ -2,10 +2,19 @@
 
 import { Input } from '@/components/Input'
 import { Link } from '@chakra-ui/next-js'
-import { Button, Flex, Heading, Text } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useAuth } from '@/contexts/AuthContext'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 const validacaoLogin = yup.object().shape({
   email: yup
@@ -32,8 +41,12 @@ export default function Login() {
     resolver: yupResolver(validacaoLogin),
   })
 
-  const onSubmit = (data: LoginDados) => {
-    console.log(data)
+  const { login } = useAuth()
+  const { isOpen: isShowing, onToggle } = useDisclosure()
+
+  const onSubmit = async (data: LoginDados) => {
+    await login(data)
+    window.location.href = '/'
   }
 
   return (
@@ -64,13 +77,22 @@ export default function Login() {
           {...register('email')}
           error={errors.email}
         />
-        <Input
-          id="senha"
-          type="password"
-          label="Senha"
-          {...register('senha')}
-          error={errors.senha}
-        />
+        <Flex align="center">
+          <Input
+            id="senha"
+            type={isShowing ? 'text' : 'password'}
+            label="Senha"
+            {...register('senha')}
+            error={errors.senha}
+          />
+          <IconButton
+            mt="auto"
+            variant="unstyled"
+            aria-label="Trocar visibilidade de senha"
+            onClick={onToggle}
+            icon={isShowing ? <FaEye /> : <FaEyeSlash />}
+          />
+        </Flex>
         <Button type="submit" colorScheme="green" isLoading={isLoading}>
           Entrar
         </Button>
