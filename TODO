@@ -1,0 +1,11 @@
+
+Todo:
+  ☐   nome: string
+  ☐ nota: number
+  ☐ categoria: string
+  ☐ distancia: string
+  ☐ tempo: string
+  ☐ taxaEntrega: number
+  ☐ pedidoMinimo: number
+  ☐ imageLogo: string
+  ☐ imageCover: string
