@@ -5,7 +5,6 @@ import { useCart } from '@/contexts/CartContext'
 import { formataMoeda } from '@/helpers/formataMoeda'
 import { obterUsuario } from '@/services/usuarioService'
 import {
-  Box,
   Button,
   Divider,
   Flex,
