@@ -2,16 +2,7 @@
 
 import {
   Flex,
-  FormControl,
-  FormLabel,
   IconButton,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Select,
   Table,
   Tbody,
   Td,
@@ -24,6 +15,8 @@ import { getProdutos } from '@/services/produtoService'
 import { AdminHeader } from '../components/AdminHeader'
 import { FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { listarLojas } from '@/services/lojaService'
+
+import { ModalProduto } from './ModalProduto'
 
 export default function ProdutosPage() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -79,31 +72,7 @@ export default function ProdutosPage() {
         </Table>
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Novo Produto</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Flex as="form" p={4} direction="column" gap={1}>
-              <FormControl>
-                <FormLabel htmlFor="loja_id">Loja</FormLabel>
-                <Select
-                  placeholder="Selecione uma loja..."
-                  id="loja_id"
-                  variant="flushed"
-                >
-                  {lojas.map((loja) => (
-                    <option key={loja.id} value={loja.id}>
-                      {loja.nome}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ModalProduto isOpen={isOpen} onClose={onClose} lojas={lojas} />
     </Flex>
   )
 }

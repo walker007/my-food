@@ -98,3 +98,26 @@ export function getProdutos(): Produto[] {
 export function getProduto(id: string): Produto | undefined {
   return getProdutos().find((produto) => produto.id === id)
 }
+
+export function updateProduto<DataForm>(
+  id: string | number,
+  produto: DataForm,
+): Produto {
+  return {
+    id: '10',
+    nome: 'Produto 10',
+    preco: 1000,
+    descricao: 'Descrição do produto 10',
+    imagem: 'https://picsum.photos/200/300',
+  }
+}
+
+export function createProduto<DataForm>(produto: DataForm): Produto {
+  return {
+    id: '10',
+    nome: 'Produto 10',
+    preco: 1000,
+    descricao: 'Descrição do produto 10',
+    imagem: 'https://picsum.photos/200/300',
+  }
+}
