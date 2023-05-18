@@ -16,7 +16,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Button,
-  FormErrorMessage,
   Image,
 } from '@chakra-ui/react'
 import { FC } from 'react'
@@ -191,7 +190,9 @@ export const ModalProduto: FC<ModalProdutoProps> = ({
                       maxW="100px"
                       alt="Preview de imagem"
                       key={index}
-                      src={URL.createObjectURL(watch('imagens').item(index))}
+                      src={URL.createObjectURL(
+                        watch('imagens').item(index) as File,
+                      )}
                     />
                   )
                 })}

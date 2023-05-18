@@ -49,6 +49,15 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           nome: 'Dummy Jhoe',
           email: 'dummy@email.com',
           id: '1',
+          endereco: {
+            bairro: 'Dummy Bairro',
+            cep: '01001000',
+            cidade: 'Dummy Cidade',
+            complemento: 'Dummy Complemento',
+            logradouro: 'Dummy Rua',
+            numero: '123',
+            estado: 'SP',
+          },
         })
       }, 2000)
     })

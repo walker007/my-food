@@ -22,11 +22,8 @@ export const UserMenu: FC = () => {
         icon={<FaUserAlt />}
       />
       <MenuList>
-        <MenuItem as={Link} href="/" icon={<FaUserCog />}>
+        <MenuItem as={Link} href="/perfil" icon={<FaUserCog />}>
           Perfil
-        </MenuItem>
-        <MenuItem as={Link} href="/" icon={<FaCog />}>
-          Configurações
         </MenuItem>
         <MenuItem
           as={Button}

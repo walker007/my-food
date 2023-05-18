@@ -13,7 +13,7 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
   return (
     <Flex direction="column">
       <Header isOpen={isOpen} onToggle={onToggle} />
-      <Flex mt="130px" minH="calc(100vh - 130px)">
+      <Flex mt="130px" pt="-130px" minH="calc(100vh - 130px)">
         {children}
       </Flex>
       <Footer />
