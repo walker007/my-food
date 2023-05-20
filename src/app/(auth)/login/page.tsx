@@ -45,8 +45,12 @@ export default function Login() {
   const { isOpen: isShowing, onToggle } = useDisclosure()
 
   const onSubmit = async (data: LoginDados) => {
-    await login(data)
-    window.location.href = '/'
+    const isLogged = await login(data)
+    if (isLogged) {
+      setTimeout(() => {
+        window.location.href = '/'
+      }, 3000)
+    }
   }
 
   return (

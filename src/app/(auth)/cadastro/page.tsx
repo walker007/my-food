@@ -1,5 +1,7 @@
 'use client'
 import { Input } from '@/components/Input'
+import { notify } from '@/config/toast'
+import { createUser } from '@/services/usuarioService'
 import { Link } from '@chakra-ui/next-js'
 import { Button, Flex, Heading, Text } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -50,10 +52,23 @@ export default function Cadastro() {
   })
 
   const cadastraUsuario = async (dados: FormularioCadastro) => {
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(dados), 3 * 1000)
-    })
-    console.log(dados)
+    try {
+      const resposta = await createUser(dados)
+      notify(resposta.data.message, 'success')
+
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 9000)
+    } catch (e: any) {
+      if (typeof e.response !== 'undefined') {
+        const {
+          data: { message },
+        } = e.response
+        notify(message, 'error')
+        return
+      }
+      notify('Um erro inesperado aconteceu', 'error')
+    }
   }
 
   return (
