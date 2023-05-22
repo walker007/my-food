@@ -44,21 +44,39 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [userData, setUserData] = useState<Usuario>(
     JSON.parse(window.localStorage.getItem('userData') || '{}'),
   )
+  const [token, setToken] = useState(
+    window.localStorage.getItem('access_token'),
+  )
 
   useEffect(() => {
     window.localStorage.setItem('userData', JSON.stringify(userData))
   }, [userData])
 
   useEffect(() => {
+    window.localStorage.setItem('access_token', token || '')
+    apiClient.defaults.headers.common.Authorization = `Bearer ${token}`
+    if (!token) return
+    const { exp } = decode<TokenClaims>(token || '')
+    const expTimesTamp = exp * 1000
+
+    const isTokenExpired = Date.now() >= expTimesTamp
+
+    setIsLogged(!isTokenExpired)
+  }, [token])
+
+  useEffect(() => {
     window.localStorage.setItem('isLogged', JSON.stringify(isLogged))
+    if (!isLogged) {
+      setToken(null)
+      setUserData({} as Usuario)
+    }
   }, [isLogged])
 
   const login = async (loginData: LoginData) => {
     try {
       const { data } = await createLogin<LoginData>(loginData)
       if (data.token !== null) {
-        apiClient.defaults.headers.common.Authorization = `Bearer ${data.token}`
-        window.localStorage.setItem('access_token', data.token)
+        setToken(data.token)
 
         const tokenClaims = decode<TokenClaims>(data.token)
 
