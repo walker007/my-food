@@ -37,6 +37,9 @@ export const CardLoja: FC<CardLojaProps> = ({
     >
       <Flex gap={4} align="center" justify="space-between">
         <Image
+          height="100px"
+          width="100px"
+          objectFit="cover"
           src={imageLogo}
           alt={`Logotipo da Loja ${nome}`}
           borderRadius="full"

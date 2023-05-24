@@ -12,14 +12,20 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  Spinner,
+  Text,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-
+import { useQuery } from 'react-query'
 import { GoSearch } from 'react-icons/go'
 
 export default function Page() {
   const [busca, setBusca] = useState('')
-  const data = listarLojas()
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['lojas', 'home'],
+    queryFn: listarLojas,
+  })
+  console.log('renderizou')
   return (
     <Flex direction="column" align="center" grow={1}>
       <Flex as="hgroup" direction="column" align="center">
@@ -78,9 +84,15 @@ export default function Page() {
       >
         <Heading fontSize="1.25rem">Lojas</Heading>
         <Flex gap={8} mt={2} wrap="wrap" align="center">
-          {data.map((loja) => (
-            <CardLoja key={loja.id} loja={loja} path={`/loja/${loja.id}`} />
-          ))}
+          {isLoading ? (
+            <Spinner size="md" />
+          ) : isError ? (
+            <Text>Ocorreu um erro</Text>
+          ) : (
+            data?.data?.map((loja) => (
+              <CardLoja key={loja.id} loja={loja} path={`/loja/${loja.id}`} />
+            ))
+          )}
         </Flex>
       </Flex>
     </Flex>

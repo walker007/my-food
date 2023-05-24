@@ -25,34 +25,41 @@ interface CreateLoja {
 
 export const getLojas = () => {
   return new Promise<Loja[]>((resolve, reject) => {
-    db.all<Loja>('SELECT * FROM lojas', (err, rows) => {
-      if (err) {
-        reject(err)
-        return
-      }
+    db.all<Loja>(
+      'SELECT id, nome, nota,categoria,tempo,taxa_entrega AS taxaEntrega, pedido_minimo AS pedidoMinimo, image_logo AS imageLogo, image_cover AS imageCover FROM lojas',
+      (err, rows) => {
+        if (err) {
+          reject(err)
+          return
+        }
 
-      resolve(rows)
-    })
+        resolve(rows)
+      },
+    )
   })
 }
 
 export const getLojaById = (id: number | string) => {
   return new Promise<Loja>((resolve, reject) => {
-    db.get<Loja>('SELECT * FROM lojas WHERE id = ?', [id], (err, row) => {
-      if (err) {
-        reject(err)
-        return
-      }
+    db.get<Loja>(
+      'SELECT id, nome, nota,categoria,tempo,taxa_entrega AS taxaEntrega, pedido_minimo AS pedidoMinimo, image_logo AS imageLogo, image_cover AS imageCover FROM lojas WHERE id = ?',
+      [id],
+      (err, row) => {
+        if (err) {
+          reject(err)
+          return
+        }
 
-      resolve(row)
-    })
+        resolve(row)
+      },
+    )
   })
 }
 
 export const createLoja = (loja: CreateLoja) => {
   return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO lojas (nome, nota, categoria, tempo, taxaEntrega, pedidoMinimo, imageLogo, imageCover) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO lojas (nome, nota, categoria, tempo, taxa_entrega, pedido_minimo, image_logo, image_cover) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         loja.nome,
         loja.nota,
@@ -77,7 +84,7 @@ export const createLoja = (loja: CreateLoja) => {
 export const updateLoja = (id: number | string, loja: Partial<CreateLoja>) => {
   return new Promise((resolve, reject) => {
     db.run(
-      'UPDATE lojas SET nome = ?, nota = ?, categoria = ?, tempo = ?, taxaEntrega = ?, pedidoMinimo = ?, imageLogo = ?, imageCover = ? WHERE id = ?',
+      'UPDATE lojas SET nome = ?, nota = ?, categoria = ?, tempo = ?, taxa_entrega = ?, pedido_minimo = ?, image_logo = ?, image_cover = ? WHERE id = ?',
       [
         loja.nome,
         loja.nota,

@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
 
 export const isLogged = async (headersReq: any) => {
-  const headers: Headers = headersReq
-  const token = headers.get('authorization')
+  const headers: Headers = headersReq.headers
+  const token = headers.get('authorization')?.split(' ')[1]
   if (!token) {
     return false
   }
@@ -16,8 +16,9 @@ export const isLogged = async (headersReq: any) => {
 }
 
 export const isAllowed = async (headersReq: any, permission: string) => {
-  const headers: Headers = headersReq
-  const token = headers.get('authorization')
+  const headers: Headers = headersReq.headers
+
+  const token = headers.get('authorization')?.split(' ')[1]
   if (!token) {
     return false
   }

@@ -49,7 +49,7 @@ export default function Login() {
     if (isLogged) {
       setTimeout(() => {
         window.location.href = '/'
-      }, 3000)
+      }, 2000)
     }
   }
 

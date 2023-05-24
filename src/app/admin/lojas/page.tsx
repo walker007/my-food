@@ -1,14 +1,13 @@
 'use client'
 
 import { Input } from '@/components/Input'
-import { listarLojas } from '@/services/lojaService'
+import { Loja, cadastraLoja, listarLojas } from '@/services/lojaService'
 import {
   Button,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
   IconButton,
   Image,
   Modal,
@@ -17,9 +16,11 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -30,15 +31,15 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { AdminHeader } from '../components/AdminHeader'
+import { getBase64 } from '@/helpers/getBase64'
+import { formataMoeda } from '@/helpers/formataMoeda'
+import { notify } from '@/config/toast'
+import { useQuery, useQueryClient } from 'react-query'
 
 const validacaoLoja = yup.object().shape({
   nome: yup.string().required('Informe o nome da loja.'),
   categoria: yup.string().required('Informe a categoria da loja.'),
   tempo: yup.string().required('Informe o tempo de preparo.'),
-  entrega: yup
-    .number()
-    .typeError('Informe uma taxa de entrega')
-    .required('Informe a taxa de entrega.'),
   logo: yup
     .mixed()
     .test('type', 'Envie uma imagem no Formato JPG ou PNG', (value: any) => {
@@ -57,15 +58,50 @@ const validacaoLoja = yup.object().shape({
       return false
     })
     .required('Informe a capa da loja.'),
+  pedidoMinimo: yup
+    .string()
+    .transform((value: string) => {
+      if (!value) return '0'
+
+      return (Number(value.replace(/\D/g, '')) / 100).toString()
+    })
+    .test({
+      name: 'pedido-minimo',
+      message: 'O pedido mínimo deve ser maior ou igual a R$ 0,0',
+      test: (value) => {
+        if (!value) return false
+
+        return Number(value) >= 0
+      },
+    })
+    .required('Informe o pedido mínimo'),
+  taxaEntrega: yup
+    .string()
+    .transform((value: string) => {
+      if (!value) return '0'
+
+      return (Number(value.replace(/\D/g, '')) / 100).toString()
+    })
+    .test({
+      name: 'taxa-entrega',
+      message: 'O valor da taxa de entrega deve ser maior ou igual a R$ 0,0',
+      test: (value) => {
+        if (!value) return false
+
+        return Number(value) >= 0
+      },
+    })
+    .required('Informe a tava de entrega'),
 })
 
 type FormularioLoja = {
   nome: string
   categoria: string
   tempo: string
-  entrega: number
   logo: any
   cover: any
+  pedidoMinimo: string
+  taxaEntrega: string
 }
 
 export default function LojaIndex() {
@@ -73,55 +109,103 @@ export default function LojaIndex() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
     watch,
+    reset,
   } = useForm<FormularioLoja>({
     resolver: yupResolver(validacaoLoja),
   })
+
+  const { isLoading, isError, data, isFetching } = useQuery({
+    queryKey: ['lojas', 'adm'],
+    queryFn: listarLojas,
+  })
+  const queryClient = useQueryClient()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const dadosLoja = listarLojas()
 
-  const salvarLoja = (dados: FormularioLoja) => {
-    console.log(dados)
+  const salvarLoja = async ({
+    logo,
+    cover,
+    pedidoMinimo,
+    taxaEntrega,
+    ...resto
+  }: FormularioLoja) => {
+    const imageLogo = await getBase64(logo[0])
+    const imageCover = await getBase64(cover[0])
+
+    const submitData: Loja = {
+      ...resto,
+      imageCover,
+      imageLogo,
+      nota: 0,
+      pedidoMinimo: Number(pedidoMinimo.replace(/\D/g, '')) / 100,
+      taxaEntrega: Number(taxaEntrega.replace(/\D/g, '')) / 100,
+    }
+
+    try {
+      const response = await cadastraLoja(submitData)
+      notify(response.data.message, 'success')
+      onClose()
+      reset()
+      queryClient.invalidateQueries({ queryKey: ['lojas', 'adm'] })
+    } catch (e: any) {
+      if (e.response) {
+        notify(e.response.data.message, 'error')
+        return
+      }
+
+      notify('Um erro ocorreu', 'error')
+    }
   }
-
   return (
     <Flex direction="column" grow={1} gap={4}>
-      <AdminHeader title="Lojas" buttonLabel="Nova Loja" onClick={onOpen} />
+      <AdminHeader
+        title="Lojas"
+        buttonLabel="Nova Loja"
+        onClick={onOpen}
+        isFetching={isFetching}
+      />
 
       <Flex>
-        <Table variant="striped">
-          <Thead>
-            <Tr>
-              <Th>Id</Th>
-              <Th>Nome da Loja</Th>
-              <Th>Avaliação</Th>
-              <Th>Ações</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {dadosLoja.map((loja) => (
-              <Tr key={loja.id}>
-                <Td>{loja.id}</Td>
-                <Td>{loja.nome}</Td>
-                <Td>{loja.nota}</Td>
-                <Td>
-                  <Flex gap={3}>
-                    <IconButton
-                      aria-label="Editar"
-                      icon={<FaPencilAlt />}
-                      colorScheme="yellow"
-                    />
-                    <IconButton
-                      aria-label="Apagar"
-                      icon={<FaTrash />}
-                      colorScheme="red"
-                    />
-                  </Flex>
-                </Td>
+        {isLoading ? (
+          <Spinner size="md" />
+        ) : isError ? (
+          <Text>Ocorreu um erro ao carregar as lojas</Text>
+        ) : (
+          <Table variant="striped">
+            <Thead>
+              <Tr>
+                <Th>Id</Th>
+                <Th>Nome da Loja</Th>
+                <Th>Avaliação</Th>
+                <Th>Ações</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {data?.data?.map((loja) => (
+                <Tr key={loja.id}>
+                  <Td>{loja.id}</Td>
+                  <Td>{loja.nome}</Td>
+                  <Td>{loja.nota}</Td>
+                  <Td>
+                    <Flex gap={3}>
+                      <IconButton
+                        aria-label="Editar"
+                        icon={<FaPencilAlt />}
+                        colorScheme="yellow"
+                      />
+                      <IconButton
+                        aria-label="Apagar"
+                        icon={<FaTrash />}
+                        colorScheme="red"
+                      />
+                    </Flex>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
       </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -159,11 +243,30 @@ export default function LojaIndex() {
                 {...register('tempo')}
               />
               <Input
-                type="number"
-                label="Taxa de Entrega"
-                id="entrega"
-                error={errors.entrega}
-                {...register('entrega')}
+                label="Pedido mínimo"
+                type="text"
+                id="pedidoMinimo"
+                error={errors.pedidoMinimo}
+                {...register('pedidoMinimo')}
+                onChange={({ target }) => {
+                  setValue(
+                    'pedidoMinimo',
+                    formataMoeda(Number(target.value.replace(/\D/g, '')) / 100),
+                  )
+                }}
+              />
+              <Input
+                label="Taxa de entrega"
+                type="text"
+                id="taxaEntrega"
+                error={errors.taxaEntrega}
+                {...register('taxaEntrega')}
+                onChange={({ target }) => {
+                  setValue(
+                    'taxaEntrega',
+                    formataMoeda(Number(target.value.replace(/\D/g, '')) / 100),
+                  )
+                }}
               />
               <Input
                 type="file"

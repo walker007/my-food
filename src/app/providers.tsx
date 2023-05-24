@@ -8,22 +8,29 @@ import { CartProvider } from '@/contexts/CartContext'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 interface ProvidersProps {
   children: ReactNode
 }
 
+const queryClient = new QueryClient()
+
 export const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <CacheProvider>
-          <ChakraProvider theme={tema}>
-            {children}
-            <ToastContainer />
-          </ChakraProvider>
-        </CacheProvider>
-      </CartProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <CartProvider>
+          <CacheProvider>
+            <ChakraProvider theme={tema}>
+              {children}
+              <ToastContainer />
+              <ReactQueryDevtools />
+            </ChakraProvider>
+          </CacheProvider>
+        </CartProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }
