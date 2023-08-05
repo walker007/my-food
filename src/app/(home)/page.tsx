@@ -89,7 +89,7 @@ export default function Page() {
           ) : isError ? (
             <Text>Ocorreu um erro</Text>
           ) : (
-            data?.data?.map((loja) => (
+            data?.data?.data?.map((loja) => (
               <CardLoja key={loja.id} loja={loja} path={`/loja/${loja.id}`} />
             ))
           )}

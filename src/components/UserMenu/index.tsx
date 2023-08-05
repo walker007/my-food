@@ -13,7 +13,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { redirect } from 'next/navigation'
 
 export const UserMenu: FC = () => {
-  const { logout } = useAuth()
+  const { logout, hasPermission } = useAuth()
   return (
     <Menu>
       <MenuButton
@@ -25,6 +25,11 @@ export const UserMenu: FC = () => {
         <MenuItem as={Link} href="/perfil" icon={<FaUserCog />}>
           Perfil
         </MenuItem>
+        {hasPermission('Administrador') && (
+          <MenuItem as={Link} href="/admin" icon={<FaCog />}>
+            Painel de Adm
+          </MenuItem>
+        )}
         <MenuItem
           as={Button}
           onClick={() => {

@@ -1,4 +1,5 @@
 import { apiClient } from '@/config/axios'
+import { Produto } from './produtoService'
 
 export interface Loja {
   id?: string
@@ -11,14 +12,19 @@ export interface Loja {
   pedidoMinimo: number
   imageLogo: string
   imageCover: string
+  produtos?: Produto[]
+}
+
+export interface PaginatedLojas {
+  data: Loja[]
 }
 
 export const listarLojas = () => {
-  return apiClient.get<Loja[]>('/loja')
+  return apiClient.get<PaginatedLojas>('/lojas')
 }
 
 export const obterLoja = (id: string) => {
-  return apiClient.get<Loja>(`/loja/${id}`)
+  return apiClient.get<Loja>(`/lojas/${id}`)
 }
 
 interface CadastraLojaDTO {
@@ -26,5 +32,13 @@ interface CadastraLojaDTO {
 }
 
 export const cadastraLoja = (lojaData: Loja) => {
-  return apiClient.post<CadastraLojaDTO>('/loja', lojaData)
+  return apiClient.post<CadastraLojaDTO>('/lojas', lojaData)
+}
+
+export const apagaLoja = (id: string | number) => {
+  return apiClient.delete<CadastraLojaDTO>(`/lojas/${id}`)
+}
+
+export const atualizaLoja = (id: string | number, lojaData: Partial<Loja>) => {
+  return apiClient.put<CadastraLojaDTO>(`/lojas/${id}`, lojaData)
 }

@@ -4,8 +4,8 @@ import { CardProdutoHorizontal } from '@/components/CardProdutoHorizontal'
 import { ModalProduto } from '@/components/ModalProduto'
 import { StarRating } from '@/components/StarRating'
 import { formataMoeda } from '@/helpers/formataMoeda'
-import { obterLoja } from '@/services/lojaService'
-import { getProdutos } from '@/services/produtoService'
+import { Loja, obterLoja } from '@/services/lojaService'
+import { Produto, getProdutos } from '@/services/produtoService'
 import {
   Button,
   Divider,
@@ -16,7 +16,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiFillDollarCircle } from 'react-icons/ai'
 import { redirect } from 'next/navigation'
 
@@ -26,10 +26,21 @@ type LojaProps = {
   }
 }
 
-export default function Loja({ params: { id } }: LojaProps) {
+export default function LojaPage({ params: { id } }: LojaProps) {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [addId, setAddId] = useState('')
-  const dadosLoja = obterLoja(id)
+  const [dadosLoja, setDadosLoja] = useState<Loja>({} as Loja)
+  const [produtos, setProdutos] = useState<Produto[]>([])
+
+  useEffect(() => {
+    obterLoja(id).then((loja) => {
+      setDadosLoja(loja.data)
+
+      if (loja.data?.produtos) {
+        setProdutos(loja.data?.produtos || [])
+      }
+    })
+  }, [id])
 
   if (!dadosLoja) {
     redirect('/')
@@ -40,8 +51,6 @@ export default function Loja({ params: { id } }: LojaProps) {
     setAddId(id)
     onOpen()
   }
-
-  const produtos = getProdutos()
 
   return (
     <Flex
