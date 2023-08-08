@@ -21,7 +21,7 @@ const validacaoLogin = yup.object().shape({
     .string()
     .email('Você precisa informar um e-mail válido.')
     .required('Você precisa informar um e-mail.'),
-  senha: yup
+  password: yup
     .string()
     .required('Informe sua senha')
     .min(8, 'Sua senha precisa ter ao menos 8 caracteres.'),
@@ -29,7 +29,7 @@ const validacaoLogin = yup.object().shape({
 
 type LoginDados = {
   email: string
-  senha: string
+  password: string
 }
 
 export default function Login() {
@@ -83,11 +83,11 @@ export default function Login() {
         />
         <Flex align="center">
           <Input
-            id="senha"
+            id="password"
             type={isShowing ? 'text' : 'password'}
             label="Senha"
-            {...register('senha')}
-            error={errors.senha}
+            {...register('password')}
+            error={errors.password}
           />
           <IconButton
             mt="auto"

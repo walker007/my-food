@@ -20,7 +20,13 @@ export const CardProduto: FC<CardProdutoProps> = ({
       transition="all 0.2s"
     >
       <CardBody padding={0}>
-        <Image src={imagem} alt={'Imagem do produto: ' + nome} />
+        <Image
+          height="220px"
+          width="380px"
+          objectFit="cover"
+          src={imagem}
+          alt={'Imagem do produto: ' + nome}
+        />
         <Stack mt={5} mx={5}>
           <Heading size="md">{nome}</Heading>
           <Text noOfLines={3}>{descricao}</Text>

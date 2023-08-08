@@ -22,10 +22,23 @@ import { FC } from 'react'
 import { FaCreditCard, FaShoppingBasket, FaTrashAlt } from 'react-icons/fa'
 import { useCart } from '@/contexts/CartContext'
 import { Link } from '@chakra-ui/next-js'
+import { cadastraPedido, checkout } from '@/services/pagamentoService'
 
 export const CheckoutButton: FC = () => {
   const { quantidade, valor, produtos, removeFromCart } = useCart()
 
+  const handlePayment = async () => {
+    const pedidoData = { produtos }
+    const response = await cadastraPedido(pedidoData)
+
+    if (response) {
+      const {
+        // eslint-disable-next-line camelcase
+        data: { payment_url },
+      } = await checkout(response.data.id)
+      window.open(payment_url, '_blank')
+    }
+  }
   return (
     <>
       <Popover>
@@ -92,8 +105,7 @@ export const CheckoutButton: FC = () => {
               width="100%"
               colorScheme="green"
               leftIcon={<FaCreditCard />}
-              as={Link}
-              href="/pagamento"
+              onClick={handlePayment}
             >
               Ir para o Pagamento
             </Button>

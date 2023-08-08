@@ -17,6 +17,7 @@ interface CartContextData {
   produtos: ProdutoProps[]
   quantidade: number
   valor: number
+  clearCart: () => void
   addToCart: (item: ProdutoProps) => void
   removeFromCart: (id: any) => void
 }
@@ -91,13 +92,18 @@ export const CartProvider: FC<CartProviderProps> = ({ children }) => {
     setQuantidade(quantidade - produtos[produtoIndex].quantidade)
     setProdutos(produtosTemp.filter((produto) => produto !== undefined))
   }
-
+  const clearCart = () => {
+    setProdutos([])
+    setQuantidade(0)
+    setValor(0)
+  }
   return (
     <CartContext.Provider
       value={{
         produtos,
         quantidade,
         valor,
+        clearCart,
         addToCart,
         removeFromCart,
       }}

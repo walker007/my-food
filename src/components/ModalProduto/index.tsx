@@ -1,4 +1,3 @@
-import { getProduto } from '@/services/produtoService'
 import {
   Button,
   Divider,
@@ -19,6 +18,7 @@ import { StarRating } from '../StarRating'
 import { formataMoeda } from '@/helpers/formataMoeda'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 import { useCart } from '@/contexts/CartContext'
+import { Produto, getProduto } from '@/services/produtoService'
 
 interface ModalProdutoProps {
   isOpen: boolean
@@ -33,12 +33,16 @@ export const ModalProduto: FC<ModalProdutoProps> = ({
 }) => {
   const [quantidade, setQuantidade] = useState(1)
   const { addToCart } = useCart()
+  const [produto, setProduto] = useState<Produto | null>(null)
 
   const handleClose = () => {
     onClose()
   }
 
-  const produto = getProduto(id)
+  useEffect(() => {
+    getProduto(id).then((response) => setProduto(response.data))
+  }, [id])
+
   useEffect(() => {
     setQuantidade(1)
   }, [isOpen])
@@ -75,6 +79,8 @@ export const ModalProduto: FC<ModalProdutoProps> = ({
             <Image
               src={produto?.imagem}
               alt={`Imagem do produto: ${produto?.nome}`}
+              objectFit="cover"
+              width="220px"
             />
             <Flex direction="column" grow={1}>
               <Text>{produto?.descricao}</Text>
